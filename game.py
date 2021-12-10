@@ -3,6 +3,7 @@
 
 import os
 import random
+import time
 from word_logic import WordLogic
 from number_logic import NumberLogic
 
@@ -80,8 +81,30 @@ class GameRunner:
             if access:
                 break
 
+def game_choice():
+    print()
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print("Welcome to the HackerGame!")
+    game_choice = ""
+    while game_choice != "1" and game_choice != "2":
+        print("Please choose the gamemode:")
+        game_choice = input("Type 1 for Word-Mode and 2 for Number-Mode\n")
+        if game_choice == "1":
+            logic = WordLogic(num_words=7, length=4, attempts=4)
+        elif game_choice == "2":
+            logic = NumberLogic(num_words=7, length=4, attempts=4)
+        else:
+            print()
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print("Your input has to be the number 1 or 2")
+            print("Try again! I know you can do this ;)")
+            time.sleep(3)
+        print()
+        os.system('cls' if os.name == 'nt' else 'clear')
+    return logic
+
 
 if __name__ == '__main__':
-    logic = NumberLogic(num_words=7, length=4, attempts=4)
+    logic = game_choice()
     runner = GameRunner(logic)
     runner.run()
