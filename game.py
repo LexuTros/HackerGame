@@ -3,50 +3,10 @@
 
 import os
 import random
-from math import floor
-from difflib import SequenceMatcher
+from word_logic import WordLogic
+from number_logic import NumberLogic
 
-class WordLogic:
-    """Internal game logic"""
 
-    def __init__(self, num_words, length, attempts):
-        """Set up a new game with the provided parameters"""
-        self.num_words = num_words
-        self.length = length
-        self.attempts = attempts
-        self.words = self.word_selection()
-        self.password = random.choice(self.words)
-
-    def word_selection(self):
-        with open("words.txt") as f:
-            word_list = f.read().splitlines()
-        fixed_length_words = [word.upper() for word in word_list if len(word) is self.length]
-        random.shuffle(fixed_length_words)
-        sel_words = fixed_length_words[0:floor(self.num_words / 3)]
-        reference_word = random.choice(sel_words)
-        counter = 0
-        while len(sel_words) < self.num_words:
-            rand_word = fixed_length_words[floor(self.num_words / 3) + counter]
-            if self.is_similar(reference_word, rand_word, 0.4):
-                sel_words.append(rand_word)
-            counter += 1
-        return sel_words
-
-    def is_similar(self, a, b, threshold):
-        if SequenceMatcher(None, a, b).ratio() > threshold:
-            return True
-        else: return False
-
-    def check(self, guess):
-        """Check a guess and give feedback"""
-        if len(guess) != self.length:
-            return False, ["Wrong length"]
-        if guess == self.password:
-            return True, ["Access granted!"]
-        else:
-            matching = sum([1 for p, g in zip(self.password, guess) if p ==  g])
-            self.attempts = self.attempts - 1
-            return False, ["%d/%d correct" % (matching, self.length), "Access denied!"]
 
 class GameRunner:
     """Interactive game front-end"""
@@ -122,6 +82,6 @@ class GameRunner:
 
 
 if __name__ == '__main__':
-    logic = WordLogic(num_words=7, length=4, attempts=4)
+    logic = NumberLogic(num_words=7, length=4, attempts=4)
     runner = GameRunner(logic)
     runner.run()
